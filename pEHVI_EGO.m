@@ -31,8 +31,9 @@ while evaluation < max_evaluation
     for ii = 1:num_obj
         kriging_obj{ii} = Kriging_Train(sample_x,sample_y_scaled(:,ii),lower_bound,upper_bound,1*ones(1,num_vari),0.001*ones(1,num_vari),1000*ones(1,num_vari));
     end
-    % get an infill point by maximizing pEHVI function using GA
+    % get a new point by maximizing pEHVI function using GA
     [infill_x,~] = Optimizer_GA(@(x)-Infill_pEHVI(x,kriging_obj,non_dominated_front_scaled),num_vari,lower_bound,upper_bound,40,50);
+    % evaluate the new point using the real objective function
     infill_y = feval(fun_name,infill_x,num_obj);
     sample_x = [sample_x;infill_x];
     sample_y = [sample_y;infill_y];
