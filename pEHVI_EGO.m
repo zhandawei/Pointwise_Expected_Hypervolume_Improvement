@@ -2,18 +2,18 @@ clearvars;close all;
 % objective function
 fun_name = 'DTLZ2';
 % number of objectives
-num_obj = 2;
+num_obj = 3;
 % number of variables
-num_vari = 6;
+num_vari = 10;
 % lower and upper bounds
 lower_bound = zeros(1,num_vari);
 upper_bound = ones(1,num_vari);
 % Pareto front of the test problem
 pareto_front = Calculate_Pareto_Front(1000,num_obj);
 % number of initial design points
-num_initial = 65;
+num_initial = 100;
 % number of maximal evaluations
-max_evaluation = 150;
+max_evaluation = 200;
 % generate initial design points
 sample_x = lower_bound + (upper_bound-lower_bound).*lhsdesign(num_initial, num_vari,'criterion','maximin','iterations',1000);
 sample_y = feval(fun_name, sample_x, num_obj);
@@ -44,4 +44,7 @@ while evaluation < max_evaluation
     non_dominated_front_scaled = sample_y_scaled(index,:);
     fprintf('pEHVI-EGO on m=%d %s function, iteration: %d, evaluation: %d, IGD: %f\n',num_obj,fun_name,iteration,evaluation,mean(min(pdist2(pareto_front,non_dominated_front),[],2)));
 end
+
+fprintf('final HV of non-dominated points: %f\n', Hypervolume(non_dominated_front,2*ones(1,num_obj)));
+
 
