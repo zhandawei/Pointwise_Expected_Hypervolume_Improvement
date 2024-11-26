@@ -9,8 +9,8 @@ end
 r = max(f,[],1) + 1;
 y = zeros(num_x,1);
 for ii = 1:num_x
-    % if the solution is predicted as a dominated solution, 
-    % we assign its metric as a negative value 
+    % if the solution is predicted as a dominated solution,
+    % we assign its metric as a negative value
     if sum(sum(f <= (u(ii,:)),2) == m) > 0
         y(ii) = - max(prod(1 + max(u(ii,:)-f,0),2) - 1);
     else
@@ -30,7 +30,7 @@ res=1/sqrt(2*pi)*exp(-x.^2/2);
 end
 
 function y=gausscdf(x)
- y=0.5*(1+erf(x/sqrt(2)));
+y=0.5*(1+erf(x/sqrt(2)));
 end
 
 
