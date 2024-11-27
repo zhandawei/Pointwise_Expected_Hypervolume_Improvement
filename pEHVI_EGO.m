@@ -1,6 +1,6 @@
 clearvars;close all;
 % objective function
-fun_name = 'DTLZ7';
+fun_name = 'DTLZ2';
 % number of objectives
 num_obj = 2;
 % number of variables
@@ -8,8 +8,6 @@ num_vari = 6;
 % lower and upper bounds
 lower_bound = zeros(1,num_vari);
 upper_bound = ones(1,num_vari);
-% Pareto front of the test problem
-pareto_front = Calculate_Pareto_Front('DTLZ7',10000,num_obj);
 % number of initial design points
 num_initial = 11*num_vari-1;
 % number of maximal evaluations
@@ -23,7 +21,7 @@ evaluation = size(sample_x,1);
 kriging_obj = cell(1,num_obj);
 % get current non-dominated front
 [non_dominated_front,index] = Paretoset(sample_y);
-fprintf('pEHVI-EGO on m=%d %s function, iteration: %d, evaluation: %d, IGD: %f\n',num_obj,fun_name,iteration,evaluation,mean(min(pdist2(pareto_front,non_dominated_front),[],2)));
+fprintf('pEHVI-EGO on m=%d %s function, iteration: %d, evaluation: %d\n',num_obj,fun_name,iteration,evaluation);
 while evaluation < max_evaluation
     for ii = 1:num_obj
         kriging_obj{ii} = Kriging_Train(sample_x,sample_y(:,ii),lower_bound,upper_bound,1*ones(1,num_vari),0.001*ones(1,num_vari),1000*ones(1,num_vari));
@@ -37,7 +35,12 @@ while evaluation < max_evaluation
     evaluation = evaluation + size(infill_x,1);
     iteration = iteration + 1;
     [non_dominated_front,index] = Paretoset(sample_y);
-    fprintf('pEHVI-EGO on m=%d %s function, iteration: %d, evaluation: %d, IGD: %f\n',num_obj,fun_name,iteration,evaluation,mean(min(pdist2(pareto_front,non_dominated_front),[],2)));
+    fprintf('pEHVI-EGO on m=%d %s function, iteration: %d, evaluation: %d\n',num_obj,fun_name,iteration,evaluation);
+end
+if num_obj == 2
+    scatter(non_dominated_front(:,1),non_dominated_front(:,2),'ro','filled');
+elseif num_obj == 3
+    scatter3(non_dominated_front(:,1),non_dominated_front(:,2),non_dominated_front(:,3),'ro','filled');
 end
 
 
